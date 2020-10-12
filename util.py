@@ -25,7 +25,7 @@ def get_mean_std(data_loader):
         mean += x.mean(2).sum(0)
         var += x.var(2).sum(0)
         nb_samples += batch_samples
-        print(f'Calculate mean and std: {batch_idx + 1}/{len(data_loader)}')
+        print(f'\rCalculate mean and std: {batch_idx + 1}/{len(data_loader)}', end='')
 
     mean /= nb_samples
     var /= nb_samples
