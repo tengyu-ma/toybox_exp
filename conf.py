@@ -52,6 +52,7 @@ ToyboxDataDirs = {
     # 'ENG-AIVASLAB1': '/home/mat/Data/v2/ModelNet/ModelNet40/DSCDSC/SOFT_C16384',  # My Lab 1060, 10.20.141.40
     # 'VUSE-10397': '/home/mat/Data/v2/ModelNet/ModelNet40/DSCDSC/SOFT_C16384',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Data/Toybox/squares_rz',  # Home
+    'd2f80b39a68e': '/content/drive/My Drive/data/squares_rz'  # Colab
 }
 
 ToyboxLogDirs = {
@@ -59,6 +60,7 @@ ToyboxLogDirs = {
     # 'ENG-AIVASLAB1': '/home/mat/Log/V2Exp',  # My Lab 1060, 10.20.141.40
     # 'VUSE-10397': '/home/mat/Log/V2Exp',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Log/ToyboxExp',  # Home
+    'd2f80b39a68e': '/content/drive/My Drive/log/ToyboxExp'  # Colab
 }
 
 ToyboxDataDir = ToyboxDataDirs[HostName]
