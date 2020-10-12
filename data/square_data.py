@@ -9,6 +9,7 @@ class ToyboxSquareData(torch.utils.data.Dataset):
     def __init__(self, root, dataset, ratio, transform=None):
         self.root = root
         self.dir = f'{self.root}/*/{dataset}/*/*/{ratio}.png'
+        print(self.dir)
         self.files = sorted(glob.glob(self.dir))
         self.transform = transform
 

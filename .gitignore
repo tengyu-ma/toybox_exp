@@ -2,3 +2,5 @@
 __pycache__/
 data/__pycache__/
 exps/__pycache__/
+nets/__pycache__/
+
