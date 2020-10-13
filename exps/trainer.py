@@ -9,7 +9,7 @@ import torchvision.transforms as transforms
 
 from datetime import datetime
 from torch.autograd import Variable
-from data.square_data import ToyboxSquareData
+from toybox_data import ToyboxData
 
 
 class ToyboxTrainer:
@@ -27,7 +27,7 @@ class ToyboxTrainer:
         self.train_loader, self.test_loader = self.get_dataloader()
 
     def get_dataloader(self):
-        Data = ToyboxSquareData
+        Data = ToyboxData
 
         if os.path.exists(conf.ToyboxMeanStdCacheFile):
             mean_std_cache = pickle.load(open(conf.ToyboxMeanStdCacheFile, 'rb'))
