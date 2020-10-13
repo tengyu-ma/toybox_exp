@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import conf
 import util
 
 from nets.classic_net import get_resnet18
@@ -9,7 +8,7 @@ from exps.trainer import ToyboxTrainer
 torch.backends.cudnn.benchmark = True
 
 
-def exp_main(ratio):
+def exp_main():
     net_name = 'resnet18'
     net = get_resnet18(pretrained=False)
     net.cuda()
@@ -24,15 +23,26 @@ def exp_main(ratio):
         num_workers=1,
         epochs=300,
     )
-    tb_trainer = ToyboxTrainer(ratio, net, net_name, optimizer, loss_func, hyper_p)
+    tb_trainer = ToyboxTrainer(
+        tr=['ryplus', 'ryminus'],
+        nview=12,
+        ratio=[100],
+        mode='sv',
+        net=net,
+        net_name=net_name,
+        optimizer=optimizer,
+        loss_func=loss_func,
+        hyper_p=hyper_p
+    )
     print(f'=== {tb_trainer.exp_name} ===')
     tb_trainer.train_test_save()
 
 
 def main():
-    ratios = ['025', '050', '075', '100']
-    for ratio in ratios[:-1]:
-        exp_main(ratio)
+    exp_main()
+    # ratios = ['025', '050', '075', '100']
+    # for ratio in ratios[:-1]:
+    #
 
 
 if __name__ == '__main__':

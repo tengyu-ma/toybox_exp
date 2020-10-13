@@ -1,3 +1,4 @@
+import os
 import conf
 import math
 import torch
@@ -35,7 +36,7 @@ class ToyboxData(torch.utils.data.Dataset):
         self.mode = mode
         self.dataset = dataset
 
-        self.all_files = sorted(glob(f'{root}/*/{dataset}/*/*/*.png'))
+        self.all_files = sorted(glob(f'{root}/*/*/*/*/*.png'))
         self.all_df = self._get_df(read_csv=True)
         self.df = self._filter()  # self.df will be then final data for train/test after filtering
 
@@ -43,16 +44,17 @@ class ToyboxData(torch.utils.data.Dataset):
 
     def _get_df(self, read_csv):
         if read_csv:
-            return pd.read_csv('squares_same_nview.csv', index_col=0)
+            df = pd.read_csv(os.path.join(conf.ProjDir, 'squares_same_nview.csv'), index_col=0)
+            return df[df.dataset == self.dataset]
         else:
             df = pd.DataFrame(
                 list(map(self._get_img_info, self.all_files)),
-                columns=['path', 'ca', 'no', 'tr', 'fr', 'ratio'],
+                columns=['path', 'dataset', 'ca', 'no', 'tr', 'fr', 'ratio'],
             )
             view_index = [i for i in range(18) for _ in range(4)] * (len(self.all_files) // 18 // 4)
             df['view_index'] = view_index
-            df.to_csv('squares_same_nview.csv')
-            return df
+            df.to_csv(os.path.join(conf.ProjDir, 'squares_same_nview.csv'))
+            return df[df.dataset == self.dataset]
 
     def _filter(self):
         df = self.all_df
@@ -121,7 +123,8 @@ class ToyboxData(torch.utils.data.Dataset):
     def _get_img_info(path):
         s = path.split('/')
         ca = s[-5]
+        dataset = s[-4]
         no = s[-3]
         tr, fr = s[-2].split('_')
         ratio, _ = s[-1].split('.')
-        return path, ca, int(no), tr, int(fr), int(ratio)
+        return path, dataset, ca, int(no), tr, int(fr), int(ratio)

@@ -7,12 +7,12 @@ from toybox_data import ToyboxData
 
 
 root = conf.ToyboxDataDir
-rot = ['rzplus', 'rzminus']
+tr = ['rzplus', 'rzminus']
 nview = 12
 ratio = [100]
 mode = 'sp'
 dataset = 'train'
-tb_data = ToyboxData(root, rot, nview, ratio, mode, dataset, transform=transforms.ToTensor())
+tb_data = ToyboxData(root, tr, nview, ratio, mode, dataset, transform=transforms.ToTensor())
 
 train_loader = torch.utils.data.DataLoader(
     tb_data,

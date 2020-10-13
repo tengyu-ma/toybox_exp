@@ -13,18 +13,32 @@ from toybox_data import ToyboxData
 
 
 class ToyboxTrainer:
-    def __init__(self, ratio, net, net_name, optimizer, loss_func, hyper_p):
+    def __init__(self, tr, nview, ratio, mode, net, net_name, optimizer, loss_func, hyper_p):
+        # Toybox data hyper-parameters
+        self.tr = tr
+        self.nview = nview
         self.ratio = ratio
+        self.mode = mode
+
+        # Training hyper-parameters
         self.net = net
         self.net_name = net_name
         self.optimizer = optimizer
         self.loss_func = loss_func
         self.hyper_p = hyper_p
 
-        self.exp_toyboxdata = f'rz-{ratio}'
-        self.exp_name = f'{net_name}-rz-{ratio}'
+        tr_str = '_'.join(tr)
+        ratio_str = '_'.join(map(str, ratio))
+
+        # Naming conventions
+        self.exp_toyboxdata = f'{tr_str}-{str(nview)}-{ratio_str}-{mode}'
+        self.exp_name = f'{net_name}-{self.exp_toyboxdata}'
         self.log_dir = f'{conf.ToyboxLogDir}/{self.exp_name}'
         self.train_loader, self.test_loader = self.get_dataloader()
+
+        print(f'Current experiments Toybox Data: {self.exp_toyboxdata}')
+        print(f'Current experiments name: {self.exp_name}')
+        print(f'Current experiments log directory: {self.log_dir}')
 
     def get_dataloader(self):
         Data = ToyboxData
@@ -42,14 +56,17 @@ class ToyboxTrainer:
             mean, std = util.get_mean_std(
                 data_loader=torch.utils.data.DataLoader(
                     Data(
-                        root=conf.ToyboxSquaresRz,
-                        dataset='train',
+                        root=conf.ToyboxDataDir,
+                        tr=self.tr,
+                        nview=self.nview,
                         ratio=self.ratio,
+                        mode='sv' if self.mode == 'mv' else self.mode,  # mv uses the same mean std as sv
+                        dataset='train',
                         transform=transforms.ToTensor()
                     ),
                     batch_size=self.hyper_p.batch_size,
-                    shuffle=False,
                     num_workers=self.hyper_p.num_workers,
+                    shuffle=False,
                     pin_memory=True
                 )
             )
@@ -63,10 +80,13 @@ class ToyboxTrainer:
 
         train_loader = torch.utils.data.DataLoader(
             Data(
-                root=conf.ToyboxSquaresRz,
-                dataset='train',
+                root=conf.ToyboxDataDir,
+                tr=self.tr,
+                nview=self.nview,
                 ratio=self.ratio,
-                transform=transform,
+                mode=self.mode,
+                dataset='train',
+                transform=transform
             ),
             batch_size=self.hyper_p.batch_size,
             shuffle=True,
@@ -77,14 +97,17 @@ class ToyboxTrainer:
 
         test_loader = torch.utils.data.DataLoader(
             Data(
-                root=conf.ToyboxSquaresRz,
-                dataset='test',
+                root=conf.ToyboxDataDir,
+                tr=self.tr,
+                nview=self.nview,
                 ratio=self.ratio,
+                mode=self.mode,
+                dataset='test',
                 transform=transform,
             ),
             batch_size=self.hyper_p.batch_size,
-            shuffle=False,
             num_workers=self.hyper_p.num_workers,
+            shuffle=False,
             pin_memory=True,
             drop_last=False
         )
