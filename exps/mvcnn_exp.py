@@ -1,3 +1,4 @@
+import gc
 import torch
 import torch.nn as nn
 import util
@@ -38,6 +39,9 @@ def exp_main(ratio):
     )
     print(f'=== {tb_trainer.exp_name} ===')
     tb_trainer.train_test_save()
+
+    del tb_trainer
+    gc.collect()  # clear unused memory
 
     # STAGE 2
     print('=== Stage 2 ===')
