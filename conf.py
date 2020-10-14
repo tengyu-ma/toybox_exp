@@ -40,11 +40,14 @@ CacheDir = os.path.join(ProjDir, 'exps/cache')
 ToyboxMeanStdCacheFile = os.path.join(CacheDir, 'mean_std_cache.pickle')
 
 HostName = socket.gethostname()
+HostName = HostName.split('.')[-1] if '.' in HostName else HostName
+
 ToyboxDataDirs = {
     'VUSE-103978002': '/home/mat/Data/Toybox/squares_same_nview',  # Lab Titan X, 10.20.141.250
     'ENG-AIVASLAB1': '/home/mat/Data/Toybox/squares_same_nview',  # My Lab 1060, 10.20.141.40
     'VUSE-10397': '/home/mat/Data/Toybox/squares_same_nview',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Data/Toybox/squares_same_nview',  # Home
+    'vampire': '/home/mat/Data/Toybox/squares_same_nview',  # ACCRE
 }
 
 ToyboxLogDirs = {
@@ -52,6 +55,7 @@ ToyboxLogDirs = {
     'ENG-AIVASLAB1': '/home/mat/Log/ToyboxExp',  # My Lab 1060, 10.20.141.40
     'VUSE-10397': '/home/mat/Log/ToyboxExp',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Log/ToyboxExp',  # Home
+    'vampire': '/home/mat/Log/ToyboxExp',  # ACCRE
 }
 
 Colab = False if HostName in ToyboxDataDirs else True
