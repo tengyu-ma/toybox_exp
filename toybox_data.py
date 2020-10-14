@@ -67,6 +67,7 @@ class ToyboxData(torch.utils.data.Dataset):
         df = df[df['tr'].isin(self.tr)] if self.tr is not None else df
         df = df[df['view_index'].isin(self.view_index)] if self.view_index is not None else df
         df = df[df['ratio'].isin(self.ratio)] if self.ratio is not None else df
+        df = df[df['view_index'] == 0] if self.mode == 'mv' else df
         return df.reset_index().drop('index', axis=1)
 
     def _preload(self):
