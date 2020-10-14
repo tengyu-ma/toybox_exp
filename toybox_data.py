@@ -67,7 +67,6 @@ class ToyboxData(torch.utils.data.Dataset):
         df = df[df['tr'].isin(self.tr)] if self.tr is not None else df
         df = df[df['view_index'].isin(self.view_index)] if self.view_index is not None else df
         df = df[df['ratio'].isin(self.ratio)] if self.ratio is not None else df
-        df = df[df['view_index'] == 0] if self.mode == 'mv' else df
         return df.reset_index().drop('index', axis=1)
 
     def _preload(self):
@@ -79,6 +78,9 @@ class ToyboxData(torch.utils.data.Dataset):
         return loaded_data
 
     def _getitem(self, index):
+        if self.mode == 'mv':
+            index *= self.nview
+
         info = self.df.loc[index]
         label = conf.ALL_CA.index(info.ca)
 
@@ -132,7 +134,7 @@ class ToyboxData(torch.utils.data.Dataset):
         return img, label, path
 
     def __len__(self):
-        return len(self.df)
+        return len(self.df) // self.nview if self.mode == 'mv' else len(self.df)
 
     def __getitem__(self, index):
         if self.preload:
