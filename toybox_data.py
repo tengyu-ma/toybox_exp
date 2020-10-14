@@ -10,7 +10,7 @@ from glob import glob
 
 
 class ToyboxData(torch.utils.data.Dataset):
-    def __init__(self, root, tr, nview, ratio, mode, dataset, transform=None):
+    def __init__(self, root, tr, nview, ratio, mode, dataset, preload=True, transform=None):
         """ The Toybox dataset designed for squares_same_nview processed data
 
         Args:
@@ -25,6 +25,9 @@ class ToyboxData(torch.utils.data.Dataset):
             mode: str, 'sv', 'mv', 'sp'
                 Which mode you want to load your data
                 'sv' - single view, 'mv' - multi view, 'sp' - sphere view
+            preload: bool,
+                Preload data into memory or not. In general, if the memory allows the preloading,
+                training will be accelerated
             transform:
                 The torch transforms after you load your data
         """
@@ -41,6 +44,9 @@ class ToyboxData(torch.utils.data.Dataset):
         self.df = self._filter()  # self.df will be then final data for train/test after filtering
 
         self.transform = transform
+
+        self.preload = preload
+        self.loaded_data = self._preload() if preload else None
 
     def _get_df(self, read_csv):
         if read_csv:
@@ -63,10 +69,14 @@ class ToyboxData(torch.utils.data.Dataset):
         df = df[df['ratio'].isin(self.ratio)] if self.ratio is not None else df
         return df.reset_index().drop('index', axis=1)
 
-    def __len__(self):
-        return len(self.df)
+    def _preload(self):
+        loaded_data = []
+        for index in range(len(self.df)):
+            print(f'\rLoading data... {index + 1} / {len(self.df)}', end='')
+            loaded_data.append(self.__getitem__(index))
+        return loaded_data
 
-    def __getitem__(self, index):
+    def _getitem(self, index):
         info = self.df.loc[index]
         label = conf.ALL_CA.index(info.ca)
 
@@ -81,7 +91,7 @@ class ToyboxData(torch.utils.data.Dataset):
                 (self.df.no == info.no) &
                 (self.df.tr == info.tr) &
                 (self.df.ratio == info.ratio)
-            ]
+                ]
             imgs = [imageio.imread(p) for p in mv_info.path]
             if self.transform is not None:
                 imgs = [self.transform(img) for img in imgs]
@@ -94,7 +104,7 @@ class ToyboxData(torch.utils.data.Dataset):
                 (self.df.no == info.no) &
                 (self.df.tr == info.tr) &
                 (self.df.ratio == info.ratio)
-            ]
+                ]
             imgs = [imageio.imread(p) for p in mv_info.path]
 
             # Build the sphere representation steps
@@ -118,6 +128,14 @@ class ToyboxData(torch.utils.data.Dataset):
             raise ValueError(f'invalid mode {self.mode}')
 
         return img, label, path
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, index):
+        if self.preload:
+            return self.loaded_data[index]
+        return self._getitem(index)
 
     @staticmethod
     def _get_img_info(path):
