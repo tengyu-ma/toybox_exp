@@ -54,6 +54,6 @@ ToyboxLogDirs = {
     'tengyu-ubuntu': '/media/tengyu/DataU/Log/ToyboxExp',  # Home
 }
 
-Colab = False if HostName in ToyboxDataDirs else False
+Colab = False if HostName in ToyboxDataDirs else True
 ToyboxDataDir = ToyboxDataDirs.get(HostName, '/content/data/squares_same_nview')  # Default Colab
 ToyboxLogDir = ToyboxLogDirs.get(HostName, '/content/log/ToyboxExp')  # Default Colab
