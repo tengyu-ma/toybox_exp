@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import conf
 import util
 
 from nets.sphere_net import SphereNet

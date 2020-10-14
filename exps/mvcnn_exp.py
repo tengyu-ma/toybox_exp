@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import conf
 import util
 
 from nets.mvcnn_net import SVCNN, MVCNN
