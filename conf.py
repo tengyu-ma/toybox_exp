@@ -36,7 +36,7 @@ ALL_6FPS = list(range(1, 500))
 ALL_1FPS = list(range(1, 500, 6))
 
 ProjDir = Path(__file__).parent
-CacheDir = os.path.join(ProjDir, 'cache')
+CacheDir = os.path.join(ProjDir, 'exps/cache')
 ToyboxMeanStdCacheFile = os.path.join(CacheDir, 'mean_std_cache.pickle')
 
 HostName = socket.gethostname()
