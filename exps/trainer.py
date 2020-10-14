@@ -28,7 +28,7 @@ class ToyboxTrainer:
         self.hyper_p = hyper_p
 
         tr_str = '_'.join(tr)
-        ratio_str = '_'.join(map(str, ratio))
+        ratio_str = '_'.join(map(lambda x: f'{x:03d}', ratio))
 
         # Naming conventions
         self.exp_toyboxdata = f'{tr_str}-{str(nview)}-{ratio_str}-{mode}'

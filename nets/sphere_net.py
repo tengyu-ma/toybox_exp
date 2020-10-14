@@ -9,7 +9,7 @@ class SphereNet(nn.Module):
     def __init__(self, nclasses):
         super().__init__()
 
-        self.features = [6,  100, 100, nclasses]
+        self.features = [3, 100, 100, nclasses]
         self.bandwidths = [64, 16, 10]
 
         assert len(self.bandwidths) == len(self.features) - 1

@@ -8,7 +8,7 @@ from exps.trainer import ToyboxTrainer
 torch.backends.cudnn.benchmark = True
 
 
-def exp_main():
+def exp_main(ratio):
     net_name = 'resnet18'
     net = get_resnet18(pretrained=False)
     net.cuda()
@@ -24,9 +24,9 @@ def exp_main():
         epochs=300,
     )
     tb_trainer = ToyboxTrainer(
-        tr=['ryplus', 'ryminus'],
+        tr=['rzplus', 'rzminus'],
         nview=12,
-        ratio=[100],
+        ratio=[ratio],
         mode='sv',
         net=net,
         net_name=net_name,
@@ -39,10 +39,9 @@ def exp_main():
 
 
 def main():
-    exp_main()
-    # ratios = ['025', '050', '075', '100']
-    # for ratio in ratios[:-1]:
-    #
+    ratios = [100, 75, 50, 25]
+    for ratio in ratios:
+        exp_main(ratio)
 
 
 if __name__ == '__main__':

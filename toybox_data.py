@@ -40,7 +40,7 @@ class ToyboxData(torch.utils.data.Dataset):
         self.dataset = dataset
 
         self.all_files = sorted(glob(f'{root}/*/*/*/*/*.png'))
-        self.all_df = self._get_df(read_csv=True)
+        self.all_df = self._get_df(read_csv=~conf.Colab)
         self.df = self._filter()  # self.df will be then final data for train/test after filtering
 
         self.transform = transform
@@ -50,7 +50,7 @@ class ToyboxData(torch.utils.data.Dataset):
 
     def _get_df(self, read_csv):
         if read_csv:
-            df = pd.read_csv(os.path.join(conf.ProjDir, 'squares_same_nview.csv'), index_col=0)
+            df = pd.read_csv(os.path.join(conf.CacheDir, 'squares_same_nview.csv'), index_col=0)
             return df[df.dataset == self.dataset]
         else:
             df = pd.DataFrame(
@@ -59,7 +59,7 @@ class ToyboxData(torch.utils.data.Dataset):
             )
             view_index = [i for i in range(18) for _ in range(4)] * (len(self.all_files) // 18 // 4)
             df['view_index'] = view_index
-            df.to_csv(os.path.join(conf.ProjDir, 'squares_same_nview.csv'))
+            df.to_csv(os.path.join(conf.CacheDir, 'squares_same_nview.csv'))
             return df[df.dataset == self.dataset]
 
     def _filter(self):
@@ -73,7 +73,8 @@ class ToyboxData(torch.utils.data.Dataset):
         loaded_data = []
         for index in range(len(self.df)):
             print(f'\rLoading data... {index + 1} / {len(self.df)}', end='')
-            loaded_data.append(self.__getitem__(index))
+            loaded_data.append(self._getitem(index))
+        print('')
         return loaded_data
 
     def _getitem(self, index):

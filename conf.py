@@ -35,10 +35,9 @@ ALL_TR = [
 ALL_6FPS = list(range(1, 500))
 ALL_1FPS = list(range(1, 500, 6))
 
-ToyboxMeanStdCacheFile = 'mean_std_cache.pickle'
-
 ProjDir = Path(__file__).parent
-
+CacheDir = os.path.join(ProjDir, 'cache')
+ToyboxMeanStdCacheFile = os.path.join(CacheDir, 'mean_std_cache.pickle')
 
 HostName = socket.gethostname()
 ToyboxDataDirs = {
@@ -55,5 +54,6 @@ ToyboxLogDirs = {
     'tengyu-ubuntu': '/media/tengyu/DataU/Log/ToyboxExp',  # Home
 }
 
+Colab = False if HostName in ToyboxDataDirs else False
 ToyboxDataDir = ToyboxDataDirs.get(HostName, '/content/data/squares_same_nview')  # Default Colab
 ToyboxLogDir = ToyboxLogDirs.get(HostName, '/content/log/ToyboxExp')  # Default Colab

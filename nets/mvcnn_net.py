@@ -39,7 +39,7 @@ class Model(nn.Module):
 
 
 class SVCNN(Model):
-    def __init__(self, name, nclasses=40, pretraining=True, cnn_name='vgg11'):
+    def __init__(self, name, nclasses=12, pretraining=True, cnn_name='vgg11'):
         super(SVCNN, self).__init__(name)
 
         self.nclasses = nclasses
@@ -50,14 +50,13 @@ class SVCNN(Model):
         if self.use_resnet:
             if self.cnn_name == 'resnet18':
                 self.net = models.resnet18(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(512, 40)
+                self.net.fc = nn.Linear(512, 12)
             elif self.cnn_name == 'resnet34':
                 self.net = models.resnet34(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(512, 40)
+                self.net.fc = nn.Linear(512, 12)
             elif self.cnn_name == 'resnet50':
                 self.net = models.resnet50(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(2048, 40)
-            self.net.conv1 = nn.Conv2d(6, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+                self.net.fc = nn.Linear(2048, 12)
         else:
             if self.cnn_name == 'alexnet':
                 self.net_1 = models.alexnet(pretrained=self.pretraining).features
@@ -70,7 +69,7 @@ class SVCNN(Model):
                 self.net_2 = models.vgg16(pretrained=self.pretraining).classifier
 
             self.net_2._modules['0'] = nn.Linear(8192, 4096)
-            self.net_2._modules['6'] = nn.Linear(4096, 40)
+            self.net_2._modules['6'] = nn.Linear(4096, 12)
 
     def forward(self, x):
         if self.use_resnet:
@@ -81,7 +80,7 @@ class SVCNN(Model):
 
 
 class MVCNN(Model):
-    def __init__(self, name, model, nclasses=40, cnn_name='vgg11', num_views=12):
+    def __init__(self, name, model, nclasses=12, cnn_name='vgg11', num_views=12):
         super(MVCNN, self).__init__(name)
 
         self.nclasses = nclasses
