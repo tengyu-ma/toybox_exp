@@ -40,7 +40,7 @@ class ToyboxData(torch.utils.data.Dataset):
         self.dataset = dataset
 
         self.all_files = sorted(glob(f'{root}/*/*/*/*/*.png'))
-        self.all_df = self._get_df(read_csv=not conf.Colab)
+        self.all_df = self._get_df(read_csv=conf.ReadCSV)
         self.df = self._filter()  # self.df will be then final data for train/test after filtering
 
         self.transform = transform

@@ -58,6 +58,7 @@ ToyboxLogDirs = {
     'vampire': '/home/mat/Log/ToyboxExp',  # ACCRE
 }
 
-Colab = False if HostName in ToyboxDataDirs else True
 ToyboxDataDir = ToyboxDataDirs.get(HostName, '/content/data/squares_same_nview')  # Default Colab
 ToyboxLogDir = ToyboxLogDirs.get(HostName, '/content/log/ToyboxExp')  # Default Colab
+
+ReadCSV = False  # glob all the file locations or use the pre-saved csv dataframe file
