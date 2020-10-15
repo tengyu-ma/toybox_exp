@@ -71,7 +71,7 @@ class ToyboxData(torch.utils.data.Dataset):
 
     def _preload(self):
         loaded_data = []
-        for index in range(len(self.df)):
+        for index in range(len(self)):
             print(f'\rLoading data... {index + 1} / {len(self)}', end='')
             loaded_data.append(self._getitem(index))
         print('')
