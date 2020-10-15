@@ -62,7 +62,7 @@ class ToyboxTrainer:
                 mode='sv' if self.mode == 'mv' else self.mode,  # mv uses the same mean std as sv
                 dataset='train',
                 transform=transforms.ToTensor()
-            ),
+            )
             data_loader = torch.utils.data.DataLoader(
                 data,
                 batch_size=self.hyper_p.batch_size,
