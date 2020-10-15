@@ -47,7 +47,7 @@ ToyboxDataDirs = {
     'ENG-AIVASLAB1': '/home/mat/Data/Toybox/squares_same_nview',  # My Lab 1060, 10.20.141.40
     'VUSE-10397': '/home/mat/Data/Toybox/squares_same_nview',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Data/Toybox/squares_same_nview',  # Home
-    'vampire': '/home/mat/Data/Toybox/squares_same_nview',  # ACCRE
+    'vampire': '/data/aivas_lab/Data/Toybox/squares_same_nview',  # ACCRE
 }
 
 ToyboxLogDirs = {
@@ -55,7 +55,7 @@ ToyboxLogDirs = {
     'ENG-AIVASLAB1': '/home/mat/Log/ToyboxExp',  # My Lab 1060, 10.20.141.40
     'VUSE-10397': '/home/mat/Log/ToyboxExp',  # Ryan Lab 1060, 10.20.141.186
     'tengyu-ubuntu': '/media/tengyu/DataU/Log/ToyboxExp',  # Home
-    'vampire': '/home/mat/Log/ToyboxExp',  # ACCRE
+    'vampire': '/data/aivas_lab/Log/ToyboxExp',  # ACCRE
 }
 
 ToyboxDataDir = ToyboxDataDirs.get(HostName, '/content/data/squares_same_nview')  # Default Colab
