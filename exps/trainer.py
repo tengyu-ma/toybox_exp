@@ -1,4 +1,5 @@
 import os
+import gc
 import util
 import conf
 import pickle
@@ -53,23 +54,28 @@ class ToyboxTrainer:
             mean, std = mean_std_cache[self.exp_toyboxdata]
         else:
             print('=== Calculating mean std... ===')
-            mean, std = util.get_mean_std(
-                data_loader=torch.utils.data.DataLoader(
-                    Data(
-                        root=conf.ToyboxDataDir,
-                        tr=self.tr,
-                        nview=self.nview,
-                        ratio=self.ratio,
-                        mode='sv' if self.mode == 'mv' else self.mode,  # mv uses the same mean std as sv
-                        dataset='train',
-                        transform=transforms.ToTensor()
-                    ),
-                    batch_size=self.hyper_p.batch_size,
-                    num_workers=self.hyper_p.num_workers,
-                    shuffle=False,
-                    pin_memory=True
-                )
+            data = Data(
+                root=conf.ToyboxDataDir,
+                tr=self.tr,
+                nview=self.nview,
+                ratio=self.ratio,
+                mode='sv' if self.mode == 'mv' else self.mode,  # mv uses the same mean std as sv
+                dataset='train',
+                transform=transforms.ToTensor()
+            ),
+            data_loader = torch.utils.data.DataLoader(
+                data,
+                batch_size=self.hyper_p.batch_size,
+                num_workers=self.hyper_p.num_workers,
+                shuffle=False,
+                pin_memory=True
             )
+            mean, std = util.get_mean_std(data_loader=data_loader)
+
+            del data
+            del data_loader
+            gc.collect()
+
             mean_std_cache[self.exp_toyboxdata] = mean, std
             pickle.dump(mean_std_cache, open(conf.ToyboxMeanStdCacheFile, 'wb'))
 
