@@ -27,7 +27,7 @@ def exp_main(ratios, trs):
         tr=trs,
         nview=12,
         ratio=ratios,
-        mode='sp',
+        mode='sv',
         net=net,
         net_name=net_name,
         optimizer=optimizer,
