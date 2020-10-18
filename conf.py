@@ -34,6 +34,7 @@ ALL_1FPS = list(range(1, 500, 6))
 ALL_NVIEW = 18
 ALL_RATIO = [100, 75, 50, 25]
 
+TEST_ALL = False
 
 ProjDir = Path(__file__).parent
 CacheDir = os.path.join(ProjDir, 'exps/cache')
